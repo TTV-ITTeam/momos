@@ -23,6 +23,4 @@ public class FormController extends DefaultController {
     @Model(value = User.class)
     private OrientDbCrud<User,String> userCrud;
 
-
-
 }

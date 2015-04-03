@@ -1,30 +1,106 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Momos App Page</title>
+    <head>
+        <title>Momos App Page</title>
+        <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="/libs/css/bootstrap.min.css" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'/>
 
-    <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- t.y bootstrap-->
+        <link href="/assets/stylesheets/jumbotron-narrow.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="header clearfix">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="#">Home</a></li>
+                        <li role="presentation"><a href="#">My Forms</a></li>
+                        <li role="presentation"><a href="#">Agenda</a></li>
+                        <li role="presentation"><a href="/session/logout">Logout</a></li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Momo's</h3>
+            </div>
+            <div class="jumbotron">
+                <h1>Welcome <span th:text="${#session.get('name')}"></span>!</h1>
+                <p class="lead">Congratulation, you have no pending task ;)</p>
+                <p><button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#newFormModal">New Form</button></p>
+            </div>
+            <div class="row marketing">
+                <div class="col-lg-6">
+                    <h4>Subheading</h4>
+                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                    <h4>Subheading</h4>
+                    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+                    <h4>Subheading</h4>
+                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+                </div>
+                <div class="col-lg-6">
+                    <h4>Subheading</h4>
+                    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                    <h4>Subheading</h4>
+                    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+                    <h4>Subheading</h4>
+                    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+                </div>
+            </div>
+            <footer class="footer">
+                <p>&copy; Transcosmos Technologic Arts 2015</p>
+            </footer>
+        </div> <!-- /container -->
 
-    <link href="/libs/css/bootstrap.min.css" rel="stylesheet" />
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'/>
-
-    <!-- t.y bootstrap-->
-    <style>
-        body {
-            font-family: 'Source Sans Pro', sans-serif;
-        }
-    </style>
-</head>
-
-<body>
-    <script src="/libs/jquery.min.js"></script>
-    <script src='/libs/ractive.min.js'></script>
-    <script src="/libs/hubu.js"></script>
-    <script src="/libs/render-service-ractive.js"></script>
+        <!-- newForm view -->
+        <div id="newFormContainer"></div>
 
 
-    <h2>Welcome <span th:text="${#session.get('name')}"></span>!</h2>
-</body>
+        <!-- libs -->
+        <script src="/libs/hubu.js"></script>
+        <script src="/libs/jquery.min.js"></script>
+        <script src="/libs/js/bootstrap.min.js"></script>
+        <script src='/libs/ractive.min.js'></script>
 
+        <!-- component -->
+        <script src="/libs/render-service.js"></script>
+        <script src="/libs/render-service-ractive.js"></script>
+
+        <!-- views -->
+        <script src="/assets/view/newForm.js"></script>
+
+        <!-- service -->
+        <script src="/assets/newFormService.js"></script>
+
+
+
+
+        <!-- App -->
+        <script>
+            var newForm = {
+                title : null,
+                entries : [
+                    {label: 'toto'}
+                ]
+            };
+
+            //Start the app!
+            jQuery(document).ready(function() {
+
+                hub.registerComponent(new RactiveRender(), {
+                    model: newForm,
+                    template: "newForm",
+                    container: 'newFormContainer',
+                    name: 'NewFormRender'
+                }).registerComponent(new NewFormService(), {
+                    model: newForm,
+                    name: 'NewFormService'
+                })
+                .start();
+
+            });
+        </script>
+
+
+        <!-- <h2>Welcome <span th:text="${#session.get('name')}"></span>!</h2> -->
+    </body>
 </html>
