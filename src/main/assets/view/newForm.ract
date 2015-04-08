@@ -11,33 +11,82 @@
             </div>
 
             <div class="modal-body">
-                <div class="container-fluid">
+                <div class="container-fluid" id="newform">
 
-                <form>
                 <!-- Iterate over the entry -->
 
                 {{#entries:index}}
 
-                    <div class="question form-group" draggable="true" on-click="selected=true">
-                        <label>{{label}}</label>
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <input type="text" class="form-control" disabled="true">
+                    {{#if index!==selected}}
+                    <div class="question" on-dblclick="set('selected',index)">
+
+                        <div class="pull-right">
+                            <button class="btn btn-sm btn-default" on-click="set('selected',index)">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </button>
+
+                            <button class="btn btn-sm btn-default" on-click="removeEntry:{{index}}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </div>
+
+                        <form>
+                            <div class="form-group">
+                                <label class="control-label">{{label}}</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" disabled="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {{else}}
+                    <div class="question-focus">
+                        <div class="pull-right">
+                            <div class="btn-group-vertical" role="group">
+                                <button class="btn btn-sm btn-default" on-click="moveUp:{{index}}">
+                                    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                                </button>
+
+                                <button class="btn btn-sm btn-default" on-click="moveDown:{{index}}">
+                                    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                </button>
                             </div>
                         </div>
+                        <!--
+                        <button class="btn btn-xs btn-danger pull-right" on-click="removeEntry:{{index}}">-</button>
+                        -->
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Question Title</label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" value="{{label}}" placeholder="Untitled">
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <input id="answer" type="text" class="form-control" value="Answer" disabled="true">
+                                </div>
+                            </div>
+                        </form>
                     </div>
+                    {{/if}}
 
                 {{/entries}}
-                </form>
 
-
-                <button type="button" class="btn-xs btn-primary" on-click="addTextEntry">Add text</button>
+                    <div class="row">
+                        <button type="button" class="btn btn-xs btn-primary" on-click="addTextEntry">Add Question</button>
+                    </div>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" on-click="set('selected',-1)">Save changes</button>
             </div>
 
         </div><!-- /.modal-content -->

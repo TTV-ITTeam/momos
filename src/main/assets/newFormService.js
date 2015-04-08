@@ -75,11 +75,41 @@ function NewFormService() {
         );
     }
 
+    function moveUp(event,index){
+        if(index<=0){
+            return;
+        }
+
+        _model.entries.splice(index-1,0,_model.entries.splice(index,1)[0]);
+        self.newFormRender.set("selected",index-1);
+    }
+
+    function moveDown(event,index){
+        if(index+1>=_model.entries.length){
+            return;
+        }
+
+        _model.entries.splice(index+1,0,_model.entries.splice(index,1)[0]);
+         self.newFormRender.set("selected",index+1);
+    }
+
+    /**
+     * Remove a previously created entry
+     * @param event - The Ractive event
+     * @param index - the entry index
+     */
+    function removeEntry(event,index){
+        _model.entries.splice(index,1);
+    }
+
     self.start = function() {
         self.newFormRender.render();
 
         //bind the event
         self.newFormRender.on("addTextEntry", addTextEntry);
+        self.newFormRender.on("removeEntry", removeEntry);
+        self.newFormRender.on("moveUp", moveUp);
+        self.newFormRender.on("moveDown", moveDown);
     };
 
     self.stop = function() {
