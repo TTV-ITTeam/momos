@@ -6,8 +6,11 @@ import com.tctav.momos.model.meta.FormType;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties("handler")
@@ -25,8 +28,9 @@ public class User {
 
     private List<FormType> myForms;
 
-    private List<FormType> myEntries;
-
+    @JsonIgnore
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<FormType> formTypes = new ArrayList<>();
 
     private String name;
 
@@ -58,5 +62,17 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean addFormType(FormType formType){
+        return getFormTypes().add(formType);
+    }
+
+    public List<FormType> getFormTypes() {
+        return formTypes;
+    }
+
+    public void setFormTypes(List<FormType> formTypes) {
+        this.formTypes = formTypes;
     }
 }

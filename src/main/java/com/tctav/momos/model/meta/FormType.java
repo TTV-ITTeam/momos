@@ -1,9 +1,10 @@
 package com.tctav.momos.model.meta;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tctav.momos.model.User;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +23,6 @@ public class FormType {
     @NotNull
     private String title;
 
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
-    private User owner;
-
     @OneToMany(orphanRemoval = true)
     private List<EntryType> entries;
 
@@ -42,14 +40,6 @@ public class FormType {
         this.title = title;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
     public List<EntryType> getEntries() {
         return entries;
     }
@@ -57,7 +47,6 @@ public class FormType {
     public void setEntries(List<EntryType> entries) {
         this.entries = entries;
     }
-
 
     public Date getCreation() {
         return creation;
