@@ -1,4 +1,3 @@
-<!-- Todo manage with h-ubu and ractive ;) -->
 <!-- New form Modal -->
 <div class="modal fade" id="newFormModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -6,8 +5,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-                <input type="text" id="newform-title" placeholder="Untitled form" autofocus="true" class="modal-title" value="{{title}}"/>
-
+                <input type="text" id="newform-title" placeholder="Untitled form" autofocus="true" class="lead" value="{{title}}"/>
             </div>
 
             <div class="modal-body">
@@ -35,7 +33,20 @@
                                 <label class="control-label">{{label}}</label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" disabled="true">
+                                        {{#if type === 'Text'}}
+                                            <input type="text" class="form-control" disabled="true">
+                                        {{elseif type === 'Paragraph'}}
+                                            <textarea class="form-control" disabled="true"></textarea>
+                                        {{elseif type === 'Multiple choice'}}
+                                        {{#choices}}
+                                            <div class="radio disabled">
+                                                <label>
+                                                    <input type="radio" name="{{name}}" disabled="true">
+                                                    {{name}}
+                                                </label>
+                                            </div>
+                                        {{/choices}}
+                                        {{/if}}
                                     </div>
                                 </div>
                             </div>
@@ -59,20 +70,71 @@
                         -->
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Question Title</label>
+                                <div class="col-md-3">
+                                    <label class="control-label">Question Title</label>
+                                </div>
+
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" value="{{label}}" placeholder="Untitled">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label">Question Type</label>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <select value={{type}} class="form-control">
+                                        <option>Text</option>
+                                        <option>Paragraph</option>
+                                        <option>Multiple choice</option>
+                                    </select>
                                 </div>
                             </div>
                         </form>
 
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-md-6">
-                                    <input id="answer" type="text" class="form-control" value="Answer" disabled="true">
-                                </div>
+
+                                {{#if type === 'Text'}}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="text" class="col-md-6 text-answer form-control" value="Answer" disabled="true">
+                                        </div>
+                                    </div>
+                                {{elseif type === 'Paragraph'}}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <textarea class="col-md-6 text-answer form-control" disabled="true">Answer</textarea>
+                                        </div>
+                                    </div>
+                                {{elseif type === 'Multiple choice'}}
+                                    {{#choices:cindex}}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="radio disabled">
+                                                <label>
+                                                    <input type="radio" name="{{name}}" disabled="true">
+                                                    <input type="text" class="form-control" value="{{name}}">
+                                                </label>
+                                                <div class="btn-group" role="group">
+                                                    <button class="btn btn-xs btn-default" on-click="removeOption:{{cindex}}">
+                                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/choices}}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-xs btn-primary" on-click="addOption">Add Option</button>
+                                        </div>
+                                    </div>
+                                {{/if}}
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-success" on-click="set('selected',-1)">Ok</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     {{/if}}
 
@@ -86,7 +148,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" on-click="set('selected',-1)">Save changes</button>
+                <button type="button" class="btn btn-success" on-click="saveNewForm">Save changes</button>
             </div>
 
         </div><!-- /.modal-content -->
