@@ -3,11 +3,11 @@
 /**
  * Handle new form creation
  *
- * @class NewFormService
+ * @class NewFormManager
  * @extends HUBU.AbstractComponent
  */
 
-function NewFormService() {
+function NewFormManager() {
     "use strict";
 
     var self = this;
@@ -15,7 +15,9 @@ function NewFormService() {
     var _newForm;
     var _url = "/form/type";
 
-    self.name = "NewFormService";
+    var _hash;
+
+    self.name = "NewFormManager";
 
     self.getComponentName = function() {
         return self.name;
@@ -36,7 +38,7 @@ function NewFormService() {
         _hub = theHub;
 
         if (typeof conf == "undefined") {
-            throw new Exception("The NewFormService configuration is mandatory.");
+            throw new Exception("The NewFormManager configuration is mandatory.");
         }
 
         if (typeof conf.model !== "object") {
@@ -50,6 +52,9 @@ function NewFormService() {
 
         _newForm = conf.model;
 
+        //Track the path change
+        _hub.subscribe(this,"/path/change",pathChange);
+
         _hub.requireService({
             component: this,
             contract: window.RactiveRenderService,
@@ -57,10 +62,13 @@ function NewFormService() {
         });
     };
 
+    function pathChange(event){
+        console.log("Hash "+event.path);
+    }
+
     function encodeIdURL(root,id){
       return root+"/"+id.replace("#","%23").replace(":","%3A");
     }
-
 
     /**
      * Add a new text entry to the form
@@ -137,30 +145,4 @@ function NewFormService() {
     self.stop = function() {
         self.newFormRender.unrender();
     };
-}
-
-
-/**
- * Swap two elements of the Array.
- *
- * @param from - The index of the first element to be swaped.
- * @param to - The index of the second element to be swaped.
- * @return true if the the array has been modified because of this method, false otherwise.
- */
-Array.prototype.swap = function(from, to) {
-    //check integer
-    if(typeof from !== 'number' || typeof to !== 'number'){
-        throw new Exception('The given parameter must be a number');
-    }
-
-    if(from === to || from < 0 || from > this.length || to < 0 || to > this.length){
-        return false;
-    }
-
-    var temp = this[from];
-    this[from]=this[to];
-    this[to]=temp;
-    temp=null;
-
-    return true;
 }
